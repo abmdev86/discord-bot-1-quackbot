@@ -12,13 +12,15 @@ datasource db {
 
 model User {
   id        String       @id @default(uuid())
-  
+  projects  Project[]   
 }
 
 model Project {
-  id        String        @id @default(uuid())
-  title     String        @unique
-  
+  id          String        @id @default(uuid())
+  title       String        @unique
+  team        User[]        
+  challenge   Challenge     @relation(fields: [challengeId], references: [id])
+  challengeId String        @unique
 }
 
 model Challenge {
@@ -26,4 +28,5 @@ model Challenge {
   title           String        @unique
   description     String
   requirements    String
+  winner          Project?
 }
