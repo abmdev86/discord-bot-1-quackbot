@@ -2,8 +2,8 @@ module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
 		if (interaction.isModalSubmit()) {
-			const favoriteColor = interaction.fields.getTextInputValue('favoriteColorInput');
-			console.log(favoriteColor);
+			// const favoriteColor = interaction.fields.getTextInputValue('favoriteColorInput');
+			// console.log(favoriteColor);
 			if (interaction.customId === 'myModal') {
 				await interaction.reply({ content: 'Your submission was received successfully!' });
 			} else if (interaction.customId === 'createQuackathon'){
