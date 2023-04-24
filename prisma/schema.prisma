@@ -26,6 +26,7 @@ model Project {
 model Challenge {
   id              String        @id @default(uuid())
   title           String        @unique
+  dueAt           DateTime
   description     String
   requirements    String
   winner          Project?
