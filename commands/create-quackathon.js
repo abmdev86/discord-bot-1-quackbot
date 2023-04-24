@@ -36,12 +36,19 @@ module.exports = {
 				.setCustomId('requirementsInput')
 				.setLabel('What are the requirements?')
 				.setStyle('PARAGRAPH');
+
+			const dueAt = new TextInputComponent()
+				.setCustomId('dueAtInput')
+				.setLabel('When is the project due?')
+				.setPlaceholder("format: MM-DD-YYYY")
+				.setStyle('SHORT');
             
 			const firstActionRow = new MessageActionRow().addComponents(titleInput);
 			const secondActionRow = new MessageActionRow().addComponents(descriptionInput);
 			const thirdActionRow = new MessageActionRow().addComponents(requirementsInput);
+			const fourthActionRow = new MessageActionRow().addComponents(dueAt);
             
-			modal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
+			modal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
             console.log(modal);
 			await interaction.showModal(modal);     
 			

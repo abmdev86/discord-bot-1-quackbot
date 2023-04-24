@@ -1,3 +1,5 @@
+const { db } = require("../lib/db");
+
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
@@ -12,7 +14,18 @@ module.exports = {
 				console.log("res1: ", res1)
 				const res2 = await interaction.fields.getTextInputValue('descriptionInput');
 				const res3 = await interaction.fields.getTextInputValue('requirementsInput');
-				console.log(res1, res2, res3);
+				const res4 = await interaction.fields.getTextInputValue('dueAtInput');
+				console.log(res1, res2, res3, res4);
+
+				await db.challenge.create({
+					data: {
+						title: res1.trim(),
+						description: res2.trim(),
+						requirements: res3.trim(),
+						dueAt: new Date(res4),
+					}
+				})
+
 				
 				await interaction.reply({content: "Quackathon Created!!"});
 				
