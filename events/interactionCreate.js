@@ -1,4 +1,5 @@
 const { db } = require('../lib/db');
+const { handleCreateQuackathon } = require('../lib/eventHandlers');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -7,24 +8,25 @@ module.exports = {
 			if (interaction.customId === 'myModal') {
 				await interaction.reply({ content: 'Your submission was received successfully!' });
 			} else if (interaction.customId === 'createQuackathon') {
-				console.log('modal submitted...');
-				const res1 = await interaction.fields.getTextInputValue('titleInput');
-				console.log('res1: ', res1);
-				const res2 = await interaction.fields.getTextInputValue('descriptionInput');
-				const res3 = await interaction.fields.getTextInputValue('requirementsInput');
-				const res4 = await interaction.fields.getTextInputValue('dueAtInput');
-				console.log(res1, res2, res3, res4);
+				await handleCreateQuackathon(interaction);
+				// console.log('modal submitted...');
+				// const res1 = await interaction.fields.getTextInputValue('titleInput');
+				// console.log('res1: ', res1);
+				// const res2 = await interaction.fields.getTextInputValue('descriptionInput');
+				// const res3 = await interaction.fields.getTextInputValue('requirementsInput');
+				// const res4 = await interaction.fields.getTextInputValue('dueAtInput');
+				// console.log(res1, res2, res3, res4);
 
-				await db.challenge.create({
-					data: {
-						title: res1.trim(),
-						description: res2.trim(),
-						requirements: res3.trim(),
-						dueAt: new Date(res4),
-					},
-				});
+				// await db.challenge.create({
+				// 	data: {
+				// 		title: res1.trim(),
+				// 		description: res2.trim(),
+				// 		requirements: res3.trim(),
+				// 		dueAt: new Date(res4),
+				// 	},
+				// });
 
-				await interaction.reply({ content: 'Quackathon Created!!' });
+				// await interaction.reply({ content: 'Quackathon Created!!' });
 			} else {
 				await interaction.reply({ content: 'Quackathon Created!!' });
 			}
