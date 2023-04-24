@@ -1,86 +1,51 @@
-const { db } = require("../lib/db");
+const { handleCreateQuackathon, handleJoinQuackathon } = require('../lib/eventHandlers');
 
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
-		if (interaction.isModalSubmit()) {
-			// const favoriteColor = interaction.fields.getTextInputValue('favoriteColorInput');
-			// console.log(favoriteColor);
-			if (interaction.customId === 'myModal') {
-				await interaction.reply({ content: 'Your submission was received successfully!' });
-			} else if (interaction.customId === 'createQuackathon'){
-				console.log("modal submitted...")
-				const res1 = await interaction.fields.getTextInputValue('titleInput');
-				console.log("res1: ", res1)
-				const res2 = await interaction.fields.getTextInputValue('descriptionInput');
-				const res3 = await interaction.fields.getTextInputValue('requirementsInput');
-				const res4 = await interaction.fields.getTextInputValue('dueAtInput');
-				const res5 = await interaction.fields.getTextInputValue('teamSize');
-				console.log(res1, res2, res3, res4, res5);
 
-				async function validateDate(date) {
-					const regex = /\d{2}-\d{2}-\d{4}/;
-					const res = regex.test(date)
-					if ( res ){
-						return true;
-					} else {
-					return false;
-					}
-				}
-
-				async function validateTeamSize(team) {
-					const regex = /[1-9]-[1-9]/;
-					const res = regex.test(team);
-					if ( res ){
-						return true;
-					}
-					// check to see if the first number is smaller than the second number
-					else if (parseInt(team[0]) > parseInt(team[2])){
-						await interaction.reply({content: "Not a valid range. (the min must be less than or equal to the max"});
-						return false;
-					}
-					else {
-						return false;
-					}
-				}
-
-			if (validateDate && validateTeamSize){
-
-				await db.challenge.create({
-					data: {
-						title: res1.trim(),
-						description: res2.trim(),
-						requirements: res3.trim(),
-						dueAt: new Date(res4),
-						minTeam: parseInt([0]),
-						maxTeam: parseInt([2])
-					}
-				})
-
-				await interaction.reply({content: "Quackathon Created!!"});
-
-			} else {
-				await interaction.reply({content: "date format must be DD-MM-YYYY and team size must be a range in the format of {number}-{number}"});
-				return
-			}
-
-				
-				
-				
-			} else {
-				await interaction.reply({content: "Quackathon Created!!"});
-			}
-		}
 		if (!interaction.isCommand()) return;
-
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		if (!command) {
+			// we dont have that command report back.
 			console.error(`No command matching ${interaction.commandName} was found.`);
 			return;
 		}
-
+		// executing interactions based on type in try/catch
 		try {
+			// if it is a modal
+			if (interaction.isModalSubmit()) {
+				// checking modal Id to execute proper event handler and response.
+				switch (interaction.customId) {
+					case 'myModal': {
+						await interaction.reply({ content: 'Your submission was received successfully!' });
+						return;
+					}
+					case 'createQuackathon': {
+						await handleCreateQuackathon(interaction);
+						return;
+					}
+					default: {
+						await interaction.reply({ content: 'Command recieved!!' });
+					}
+				}
+				// if (interaction.customId === 'myModal') {
+				// 	await interaction.reply({ content: 'Your submission was received successfully!' });
+				// } else if (interaction.customId === 'createQuackathon') {
+				// 	await handleCreateQuackathon(interaction);
+				// } else {
+				// 	await interaction.reply({ content: 'Quackathon Created!!' });
+				// }
+
+				// if they are joining a quackathon
+			}
+
+			if (interaction.isSelectMenu()) {
+				console.log('joining...');
+				await handleJoinQuackathon(interaction);
+			}
+
 			await command.execute(interaction);
 		} catch (err) {
 			console.error(`Error executing ${interaction.commandName}`);

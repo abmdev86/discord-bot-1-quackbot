@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,16 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String       @id @default(uuid())
-  projects  Project[]   
+  id       String    @id @default(uuid())
+  projects Project[] @relation("ProjectToUser")
 }
 
 model Project {
-  id          String        @id @default(uuid())
-  title       String        @unique
-  team        User[]        
-  challenge   Challenge     @relation(fields: [challengeId], references: [id])
-  challengeId String        @unique
+  id          String    @id @default(uuid())
+  title       String    @unique
+  challengeId String    @unique
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  team        User[]    @relation("ProjectToUser")
 }
 
 model Challenge {
@@ -33,3 +30,4 @@ model Challenge {
   requirements    String
   winner          Project?
 }
+
