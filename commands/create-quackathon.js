@@ -42,13 +42,20 @@ module.exports = {
 				.setLabel('When is the project due?')
 				.setPlaceholder("format: MM-DD-YYYY")
 				.setStyle('SHORT');
+
+			const teamSizeInput = new TextInputComponent()
+				.setCustomId('teamSize')
+				.setLabel('Give a range for team size')
+				.setPlaceholder("format: 2-4")
+				.setStyle('SHORT');
             
 			const firstActionRow = new MessageActionRow().addComponents(titleInput);
 			const secondActionRow = new MessageActionRow().addComponents(descriptionInput);
 			const thirdActionRow = new MessageActionRow().addComponents(requirementsInput);
 			const fourthActionRow = new MessageActionRow().addComponents(dueAt);
+			const fifthActionRow = new MessageActionRow().addComponents(teamSizeInput);
             
-			modal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
+			modal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow, fifthActionRow);
             console.log(modal);
 			await interaction.showModal(modal);     
 			

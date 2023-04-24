@@ -15,7 +15,31 @@ module.exports = {
 				const res2 = await interaction.fields.getTextInputValue('descriptionInput');
 				const res3 = await interaction.fields.getTextInputValue('requirementsInput');
 				const res4 = await interaction.fields.getTextInputValue('dueAtInput');
-				console.log(res1, res2, res3, res4);
+				const res5 = await interaction.fields.getTextInputValue('teamSize');
+				console.log(res1, res2, res3, res4, res5);
+
+				async function validateDate(date) {
+					if (date === /\d{2}-\d{2}-\d{4}/){
+						return true;
+				} else {
+					return false;
+				}
+			}
+
+				async function validateTeamSize(team) {
+					if (team === /[1-9]-[1-9]/){
+						return true;
+					}
+					else if (parseInt(team[0]) > parseInt(team[2])){
+						await interaction.reply({content: "Not a valid range. (the min must be less than or equal to the max"});
+						return false;
+					}
+					else {
+						return false;
+					}
+				}
+
+			if (validateDate && validateTeamSize){
 
 				await db.challenge.create({
 					data: {
@@ -23,11 +47,20 @@ module.exports = {
 						description: res2.trim(),
 						requirements: res3.trim(),
 						dueAt: new Date(res4),
+						minTeam: parseInt([0]),
+						maxTeam: parseInt([2])
 					}
 				})
 
-				
 				await interaction.reply({content: "Quackathon Created!!"});
+
+			} else {
+				await interaction.reply({content: "date format must be DD-MM-YYYY and team size must be a range in the format of {number}-{number}"});
+				return
+			}
+
+				
+				
 				
 			} else {
 				await interaction.reply({content: "Quackathon Created!!"});
