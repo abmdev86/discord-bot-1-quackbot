@@ -19,17 +19,22 @@ module.exports = {
 				console.log(res1, res2, res3, res4, res5);
 
 				async function validateDate(date) {
-					if (date === /\d{2}-\d{2}-\d{4}/){
+					const regex = /\d{2}-\d{2}-\d{4}/;
+					const res = regex.test(date)
+					if ( res ){
 						return true;
-				} else {
+					} else {
 					return false;
+					}
 				}
-			}
 
 				async function validateTeamSize(team) {
-					if (team === /[1-9]-[1-9]/){
+					const regex = /[1-9]-[1-9]/;
+					const res = regex.test(team);
+					if ( res ){
 						return true;
 					}
+					// check to see if the first number is smaller than the second number
 					else if (parseInt(team[0]) > parseInt(team[2])){
 						await interaction.reply({content: "Not a valid range. (the min must be less than or equal to the max"});
 						return false;
