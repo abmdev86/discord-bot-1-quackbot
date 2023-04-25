@@ -12,6 +12,7 @@ module.exports = {
 		const username = await interaction.user.username;
 		const ownerId = await interaction.guild.ownerId;
 		console.log(userId, username);
+		// TODO: add back ownerID before submission!
 		if (userId) {
 			console.log('is the owner!!');
 
