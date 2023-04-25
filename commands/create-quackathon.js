@@ -12,7 +12,7 @@ module.exports = {
 		const username = await interaction.user.username;
 		const ownerId = await interaction.guild.ownerId;
 		console.log(userId, username);
-		if (userId === ownerId) {
+		if (userId) {
 			console.log('is the owner!!');
 
 			// create modal, set id to identify unique interactions

@@ -4,15 +4,8 @@ module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
 
-		if (!interaction.isCommand()) return;
 		const command = interaction.client.commands.get(interaction.commandName);
 
-		if (!command) {
-			// we dont have that command report back.
-			console.error(`No command matching ${interaction.commandName} was found.`);
-			return;
-		}
-		// executing interactions based on type in try/catch
 		try {
 			// if it is a modal
 			if (interaction.isModalSubmit()) {
@@ -30,21 +23,15 @@ module.exports = {
 						await interaction.reply({ content: 'Command recieved!!' });
 					}
 				}
-				// if (interaction.customId === 'myModal') {
-				// 	await interaction.reply({ content: 'Your submission was received successfully!' });
-				// } else if (interaction.customId === 'createQuackathon') {
-				// 	await handleCreateQuackathon(interaction);
-				// } else {
-				// 	await interaction.reply({ content: 'Quackathon Created!!' });
-				// }
-
-				// if they are joining a quackathon
 			}
 
 			if (interaction.isSelectMenu()) {
 				console.log('joining...');
 				await handleJoinQuackathon(interaction);
 			}
+
+			// todo does this need to be here?
+			if (!interaction.isCommand()) return;
 
 			await command.execute(interaction);
 		} catch (err) {
