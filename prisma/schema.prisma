@@ -9,15 +9,28 @@ datasource db {
 
 model User {
   id       String    @id @default(uuid())
-  projects Project[] @relation("ProjectToUser")
+  projects UsersOnProjects[]
 }
 
-model Project {
+model ProjectTeam {
   id          String    @id @default(uuid())
-  title       String    @unique
+  projectName String    @unique
   challengeId String    @unique
-  challenge   Challenge @relation(fields: [challengeId], references: [id])
-  team        User[]    @relation("ProjectToUser")
+  challenge   Challenge?
+  members     UsersOnProjects[]
+  winner      Boolean   @default(false)
+  isSubmitted Boolean   @default(false)
+}
+
+model UsersOnProjects {
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    
+  project     ProjectTeam   @relation(fields: [projectId], references: [id])
+  projectId   String
+
+  createdAt   DateTime  @default(now())
+
+  @@id([userId, projectId])
 }
 
 model Challenge {
@@ -28,6 +41,7 @@ model Challenge {
   maxTeam         Int           @default(4)
   description     String
   requirements    String
-  winner          Project?
+  projectTeam     ProjectTeam   @relation(fields: [projectId], references: [id])
+  projectId       String        @unique
 }
 
