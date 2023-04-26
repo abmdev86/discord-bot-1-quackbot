@@ -15,7 +15,7 @@ model User {
 model ProjectTeam {
   id          String    @id @default(uuid())
   projectName String    @unique
-  challengeId String    @unique
+  challengeId String    
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   members     UsersOnProjects[]
   winner      Boolean   @default(false)
@@ -37,11 +37,10 @@ model Challenge {
   id              String        @id @default(uuid())
   title           String        @unique
   dueAt           DateTime
-  minTeam         Int           @default(2)
-  maxTeam         Int           @default(4)
+  minTeam         Int?           @default(2)
+  maxTeam         Int?           @default(4)
   description     String
   requirements    String
   projectTeam     ProjectTeam[]
-  projectId       String        @unique
 }
 
