@@ -18,3 +18,30 @@ export async function createQuackathon(challenge: CreateQuackathon) {
 	});
     
 }
+
+interface CreateProjectTeam {
+	projectName: string,
+	challengeId: string,
+	members: string[],
+	winner: boolean,
+	isSubmitted: boolean,
+}
+
+export async function createProjectTeam(projectTeam: CreateProjectTeam) {
+	return await prisma.projectTeam.create({
+		data: {
+			projectName: projectTeam.projectName.trim(),
+			challengeId: projectTeam.challengeId,
+			winner: projectTeam.winner,
+			isSubmitted: projectTeam.isSubmitted,
+			members: {
+				create: [
+					{ userId: projectTeam.members[0] },
+					{ userId: projectTeam.members[1] },
+					{ userId: projectTeam.members[2] },
+				]
+			}
+		},
+		
+	});
+}
