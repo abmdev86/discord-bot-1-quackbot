@@ -9,28 +9,44 @@ datasource db {
 
 model User {
   id       String    @id @default(uuid())
-  projects UsersOnProjects[]
+  teams    UsersOnTeams[]
+
+  createdAt DateTime  @default(now())
 }
 
-model ProjectTeam {
+model Team {
   id          String    @id @default(uuid())
-  projectName String    @unique
   challengeId String    
   challenge   Challenge @relation(fields: [challengeId], references: [id])
-  members     UsersOnProjects[]
-  winner      Boolean   @default(false)
-  isSubmitted Boolean   @default(false)
+  members     UsersOnTeams[]
+  submissions Submission?
+
+  createdAt   DateTime  @default(now())
 }
 
-model UsersOnProjects {
+model UsersOnTeams {
   user        User      @relation(fields: [userId], references: [id])
   userId      String    
-  project     ProjectTeam   @relation(fields: [projectId], references: [id])
-  projectId   String
+  team        Team      @relation(fields: [teamId], references: [id])
+  teamId      String
 
   createdAt   DateTime  @default(now())
 
-  @@id([userId, projectId])
+  @@id([userId, teamId])
+}
+
+model Submission {
+  id              String    @id @default(uuid())
+  projectName     String    @unique
+  teamId          String    @unique
+  team            Team      @relation(fields: [teamId], references: [id])
+  repoUrl         String
+  deployedUrl     String?
+  winner          Boolean   @default(false)
+  isSubmitted     Boolean   @default(false)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Challenge {
@@ -41,6 +57,9 @@ model Challenge {
   maxTeam         Int?           @default(4)
   description     String
   requirements    String
-  projectTeam     ProjectTeam[]
+  projectTeam     Team[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
