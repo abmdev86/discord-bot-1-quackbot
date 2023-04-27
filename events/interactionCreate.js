@@ -1,9 +1,8 @@
-const { handleCreateQuackathon, handleJoinQuackathon } = require('../lib/eventHandlers');
+const { handleCreateQuackathon, handleJoinQuackathon, handleSubmitProject } = require('../lib/eventHandlers');
 
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
-
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		try {
@@ -19,8 +18,12 @@ module.exports = {
 						await handleCreateQuackathon(interaction);
 						return;
 					}
+					case 'submitProject': {
+						await handleSubmitProject(interaction);
+						return;
+					}
 					default: {
-						await interaction.reply({ content: 'Command recieved!!' });
+						await interaction.reply({ content: 'Command received!!' });
 					}
 				}
 			}

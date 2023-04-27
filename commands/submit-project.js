@@ -1,7 +1,9 @@
-// const {db} = require('../lib/db');
-
+const { db } = require('../lib/db');
 const { SlashCommandBuilder } = require('@discordjs/builders');
 const { Modal, TextInputComponent, MessageActionRow } = require('discord.js');
+const getAllChallenges = async () => {
+	return await db.challenge.findMany();
+};
 
 module.exports = {
 	data: new SlashCommandBuilder().setName('submit-project').setDescription('Allows a member to submit a project'),
@@ -9,7 +11,7 @@ module.exports = {
 		const userId = await interaction.user.id;
 		const username = await interaction.user.username;
 		const ownerId = await interaction.guild.ownerId;
-		console.log(userId, username);
+		console.log('here==>', userId, username);
 		if (userId) {
 			const modal = new Modal().setTitle('Submit Project').setCustomId('submitProject');
 
