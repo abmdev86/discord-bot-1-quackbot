@@ -9,6 +9,7 @@ datasource db {
 
 model User {
   id       String    @id @default(uuid())
+  userName String    @unique
   teams    UsersOnTeams[]
 
   createdAt DateTime  @default(now())
@@ -16,6 +17,7 @@ model User {
 
 model Team {
   id          String    @id @default(uuid())
+  name        String    @unique
   challengeId String    
   challenge   Challenge @relation(fields: [challengeId], references: [id])
   members     UsersOnTeams[]
@@ -43,7 +45,6 @@ model Submission {
   repoUrl         String
   deployedUrl     String?
   winner          Boolean   @default(false)
-  isSubmitted     Boolean   @default(false)
 
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
@@ -60,6 +61,6 @@ model Challenge {
   projectTeam     Team[]
 
   createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  updatedAt       DateTime?      @updatedAt
 }
 
