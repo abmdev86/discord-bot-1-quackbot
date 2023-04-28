@@ -8,6 +8,9 @@
 		"start": "nodemon index.js",
 		"commsync": "node deploy-commands.js"
 	},
+	"prisma": {
+		"seed": "ts-node --transpile-only prisma/seed.ts"
+	  },
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
