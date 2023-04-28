@@ -12,26 +12,31 @@ module.exports = {
 		const userId = await interaction.user.id;
 		console.log(`${userId} is creating an interaction`);
 
+		console.log("creating messgae row...");
+		
 		const row = new MessageActionRow().addComponents(
 			new MessageSelectMenu()
-				.setCustomId('register-select')
+				.setCustomId('register')
 				.setPlaceholder('register?')
-				.addOptions(['yes']),
+				.addOptions([{label: "yes", description: "register to participate", value: "hi"}]),
 		);
+
+		console.log("creating message embed...");
 
 		const embed = new MessageEmbed()
 				.setColor('#0099ff')
 				.setTitle('Register')
-				.setURL('https://discord.gg/FQeJPpzMnZ')
 				.setDescription('Once users register, they can create teams and submit projects');
-			await interaction.reply({
+
+		await interaction.reply({
 				content: 'Register to participate in Quackathons?',
 				ephemeral: true,
 				embeds: [embed],
 				components: [row],
 			});
+
 		} catch (error) {
-			console.error("Unable to register user");
+			console.error("Unable to register user", error);
 			await interaction.reply({
 				content: "unable to register",
 				ephemeral: true,
