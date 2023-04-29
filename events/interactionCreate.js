@@ -1,4 +1,9 @@
-const { handleCreateQuackathon, handleJoinQuackathon, handleSubmitProject } = require('../lib/eventHandlers');
+const {
+	handleCreateQuackathon,
+	handleJoinQuackathon,
+	handleSubmitProject,
+	handleRegister,
+} = require('../lib/eventHandlers');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -30,7 +35,19 @@ module.exports = {
 
 			if (interaction.isSelectMenu()) {
 				console.log('joining...');
-				await handleJoinQuackathon(interaction);
+				switch (interaction.customId) {
+					case 'join-quackathon': {
+						await handleJoinQuackathon(interaction);
+						return;
+					}
+					case 'register': {
+						await handleRegister(interaction);
+						return;
+					}
+					default: {
+						console.error('something bad happened in is select menu');
+					}
+				}
 			}
 
 			// todo does this need to be here?
