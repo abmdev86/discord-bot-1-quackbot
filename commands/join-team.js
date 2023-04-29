@@ -1,12 +1,12 @@
 const { db } = require('../lib/db');
 
 const { SlashCommandBuilder } = require('@discordjs/builders');
-const { MessageActionRow, MessageSelectMenu, MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageSelectMenu, MessageEmbed, TextInputComponent } = require('discord.js');
 const getAllChallenges = async () => {
 	return await db.challenge.findMany();
 };
 module.exports = {
-	data: new SlashCommandBuilder().setName('join-quackathon').setDescription('Join a Quackathon'),
+	data: new SlashCommandBuilder().setName('create-team').setDescription('Create a team'),
 	async execute(interaction) {
 		try {
 			const challenges = await getAllChallenges();
@@ -25,24 +25,27 @@ module.exports = {
 			} else {
 				availableOptions.push({ label: 'No Challenges Currently', description: 'Check back later', value: 0 });
 			}
+			const selectMenu = new MessageSelectMenu()
+				.setCustomId('challenge-select')
+				.setPlaceholder('No Challenge Selected')
+				.addOptions(availableOptions);
+			const teamNameInput = new TextInputComponent()
+				.customId('new-team-name')
+				.label('What is the Team name?')
+				.setStyle('SHORT');
 
-			console.log(challenges);
-			const row = new MessageActionRow().addComponents(
-				new MessageSelectMenu()
-					.setCustomId('join-challenge-select')
-					.setPlaceholder('No Quackathon Selected')
-					.addOptions(availableOptions),
-			);
+			const teamNameRow = new MessageActionRow().addComponents(teamNameInput);
+			const selectRow = new MessageActionRow().addComponents(selectMenu);
 			const embed = new MessageEmbed()
 				.setColor('#0099ff')
-				.setTitle('Join A QUACKATHON')
+				.setTitle('Create a team')
 				.setURL('https://discord.gg/FQeJPpzMnZ')
-				.setDescription('Select a Quackathon you would like to join.');
+				.setDescription('Create a team name and select the challenge to join.');
 			await interaction.reply({
-				content: 'Select a Quackathon to join:',
+				content: 'Create your team:',
 				ephemeral: true,
 				embeds: [embed],
-				components: [row],
+				components: [teamNameRow, selectRow],
 			});
 		} catch (error) {
 			console.error('AN ERROR', error);

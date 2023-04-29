@@ -3,7 +3,6 @@ const { handleCreateQuackathon, handleJoinQuackathon, handleRegister } = require
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
-
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		try {
@@ -25,24 +24,23 @@ module.exports = {
 				}
 			}
 
-			if (interaction.isSelectMenu()) {
-				console.log('joining...');
-				switch (interaction.customId) {
-					case 'join-quackathon': {
-						await handleJoinQuackathon(interaction);
-						return
-					}
-					case 'register': {
-						await handleRegister(interaction);
-						return
-					}
-					default: {
-						console.error("something bad happened in is select menu");
-					}
-				}
-				
-				
-			}
+			// if (interaction.isSelectMenu()) {
+			// 	console.log('joining...');
+			// 	switch (interaction.customId) {
+			// 		case 'join-quackathon': {
+			// 			await handleJoinQuackathon(interaction);
+			// 			return
+			// 		}
+			// 		case 'register': {
+			// 			await handleRegister(interaction);
+			// 			return
+			// 		}
+			// 		default: {
+			// 			console.error("something bad happened in is select menu");
+			// 		}
+			// 	}
+
+			// }
 
 			// todo does this need to be here?
 			if (!interaction.isCommand()) return;
