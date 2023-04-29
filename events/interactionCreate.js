@@ -1,7 +1,10 @@
-const { handleCreateQuackathon, handleJoinQuackathon, handleRegister } = require('../lib/eventHandlers');
-/**
- * Calls the events handlers from ./lib/eventHandlers. This script checks for conditions and runs the proper eventHandler function.
- */
+const {
+	handleCreateQuackathon,
+	handleJoinQuackathon,
+	handleSubmitProject,
+	handleRegister,
+} = require('../lib/eventHandlers');
+
 module.exports = {
 	name: 'interactionCreate',
 	async execute(interaction) {
@@ -25,33 +28,32 @@ module.exports = {
 						await handleCreateQuackathon(interaction);
 						return;
 					}
-					case 'create-team-modal': {
-						const fields = interaction.getTextInputValue('teamNameInput');
-						console.log(fields);
+					case 'submitProject': {
+						await handleSubmitProject(interaction);
+						return;
 					}
 					default: {
-						await interaction.reply({ content: 'Command recieved!!' });
+						await interaction.reply({ content: 'Command received!!' });
 					}
 				}
 			}
 
-			// if (interaction.isSelectMenu()) {
-			// 	console.log('joining...');
-			// 	switch (interaction.customId) {
-			// 		case 'join-quackathon': {
-			// 			await handleJoinQuackathon(interaction);
-			// 			return
-			// 		}
-			// 		case 'register': {
-			// 			await handleRegister(interaction);
-			// 			return
-			// 		}
-			// 		default: {
-			// 			console.error("something bad happened in is select menu");
-			// 		}
-			// 	}
-
-			// }
+			if (interaction.isSelectMenu()) {
+				console.log('joining...');
+				switch (interaction.customId) {
+					case 'join-quackathon': {
+						await handleJoinQuackathon(interaction);
+						return;
+					}
+					case 'register': {
+						await handleRegister(interaction);
+						return;
+					}
+					default: {
+						console.error('something bad happened in is select menu');
+					}
+				}
+			}
 
 			// todo does this need to be here?
 			if (!interaction.isCommand()) return;
