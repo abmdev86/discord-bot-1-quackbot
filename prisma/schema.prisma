@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,23 +8,57 @@ datasource db {
 }
 
 model User {
-  id        String       @id @default(uuid())
-  projects  Project[]   
+  id       String    @unique
+  userName String    
+  teams    UsersOnTeams[]
+  createdAt DateTime  @default(now())
 }
 
-model Project {
-  id          String        @id @default(uuid())
-  title       String        @unique
-  team        User[]        
-  challenge   Challenge     @relation(fields: [challengeId], references: [id])
-  challengeId String        @unique
+model Team {
+  id          String    @id @default(uuid())
+  name        String    @unique
+  challengeId String    
+  challenge   Challenge @relation(fields: [challengeId], references: [id])
+  members     UsersOnTeams[]
+  submissions Submission?
+  createdAt   DateTime  @default(now())
+}
+
+model UsersOnTeams {
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    
+  team        Team      @relation(fields: [teamId], references: [id])
+  teamId      String
+
+  createdAt   DateTime  @default(now())
+
+  @@id([userId, teamId])
+}
+
+model Submission {
+  id              String    @id @default(uuid())
+  projectName     String    @unique
+  teamId          String    @unique
+  team            Team      @relation(fields: [teamId], references: [id])
+  repoUrl         String
+  deployedUrl     String?
+  winner          Boolean   @default(false)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Challenge {
   id              String        @id @default(uuid())
   title           String        @unique
   dueAt           DateTime
+  minTeam         Int?           @default(2)
+  maxTeam         Int?           @default(4)
   description     String
   requirements    String
-  winner          Project?
+  projectTeam     Team[]
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime?      @updatedAt
 }
+
