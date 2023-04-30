@@ -86,6 +86,7 @@ module.exports = {
 			}
 
 			if (!interaction.isCommand()) return;
+
 			// need this here for certain commands. create-quackathon does not work without this for example.
 			await command.execute(interaction);
 		} catch (err) {
