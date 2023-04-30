@@ -49,6 +49,9 @@ module.exports = {
 						await handleRegister(interaction);
 						return;
 					}
+					case 'create-team': {
+						await interaction.editReply({ content: 'Message recieved' });
+					}
 					default: {
 						console.error('something bad happened in is select menu');
 					}
