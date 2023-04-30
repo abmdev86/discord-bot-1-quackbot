@@ -1,9 +1,11 @@
+const { getAllChallenges, getChallengeById } = require('../lib/dbHandlers');
 const {
 	handleCreateQuackathon,
 	handleJoinQuackathon,
 	handleSubmitProject,
 	handleRegister,
 } = require('../lib/eventHandlers');
+const { MessageActionRow, MessageSelectMenu, MessageEmbed, TextInputComponent, Modal } = require('discord.js');
 
 module.exports = {
 	name: 'interactionCreate',
@@ -11,6 +13,27 @@ module.exports = {
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		try {
+			if (interaction.commandName === 'create-team') {
+				const teamName = interaction.options._hoistedOptions[0].value;
+				const select = new MessageSelectMenu()
+					.setCustomId('create-team-select')
+					.setPlaceholder('Choose a Challenge to join');
+				const challenges = await getAllChallenges();
+				const selectOptions = [];
+				challenges.map(challenge => {
+					let challengeAsOption = {
+						label: challenge.title,
+						description: challenge.description,
+						value: challenge.id,
+					};
+					selectOptions.push(challengeAsOption);
+				});
+				select.addOptions(selectOptions);
+				const row = new MessageActionRow().addComponents(select);
+				//await interaction.reply(`Created team ${teamName}`);
+				await interaction.reply({ content: teamName, components: [row] });
+				return;
+			}
 			//check for the command name.
 
 			// JOIN TEAM
@@ -49,9 +72,19 @@ module.exports = {
 						await handleRegister(interaction);
 						return;
 					}
-					case 'create-team': {
-						await interaction.editReply({ content: 'Message recieved' });
+					case 'create-team-select': {
+						const team = interaction.message.content;
+						const challengeID = interaction.values[0];
+						const challenge = await getChallengeById(challengeID);
+						await interaction.deferReply();
+
+						await interaction.editReply(
+							`The Team, ${team},  has been created for the challenge ${challenge.title}`,
+						);
+
+						return;
 					}
+
 					default: {
 						console.error('something bad happened in is select menu');
 					}
