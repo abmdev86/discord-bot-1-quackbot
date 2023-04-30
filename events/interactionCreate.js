@@ -17,7 +17,6 @@ module.exports = {
 
 			// if it is a modal
 			if (interaction.isModalSubmit()) {
-				console.log('modal submitted');
 				// checking modal Id to execute proper event handler and response.
 				switch (interaction.customId) {
 					case 'myModal': {
@@ -28,6 +27,7 @@ module.exports = {
 						await handleCreateQuackathon(interaction);
 						return;
 					}
+
 					case 'submitProject': {
 						await handleSubmitProject(interaction);
 						return;
