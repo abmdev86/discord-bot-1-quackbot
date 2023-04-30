@@ -88,7 +88,8 @@ module.exports = {
 			// todo does this need to be here?
 			if (!interaction.isCommand()) return;
 
-			//await command.execute(interaction);
+			// need this here for certain commands. create-quackathon does not work without this for example.
+			await command.execute(interaction);
 		} catch (err) {
 			console.error(`Error executing ${interaction.commandName}`);
 			console.error(err);
