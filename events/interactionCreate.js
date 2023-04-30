@@ -1,9 +1,10 @@
-const { getAllChallenges, getChallengeById } = require('../lib/dbHandlers');
+const { getAllChallenges, getChallengeById, createTeam } = require('../lib/dbHandlers');
 const {
 	handleCreateQuackathon,
 	handleJoinQuackathon,
 	handleSubmitProject,
 	handleRegister,
+	handleCreateTeam,
 } = require('../lib/eventHandlers');
 const { MessageActionRow, MessageSelectMenu, MessageEmbed, TextInputComponent, Modal } = require('discord.js');
 
@@ -14,6 +15,7 @@ module.exports = {
 
 		try {
 			if (interaction.commandName === 'create-team') {
+				//todo move somewhere else if needed.
 				const teamName = interaction.options._hoistedOptions[0].value;
 				const select = new MessageSelectMenu()
 					.setCustomId('create-team-select')
@@ -73,15 +75,7 @@ module.exports = {
 						return;
 					}
 					case 'create-team-select': {
-						const team = interaction.message.content;
-						const challengeID = interaction.values[0];
-						const challenge = await getChallengeById(challengeID);
-						await interaction.deferReply();
-
-						await interaction.editReply(
-							`The Team, ${team},  has been created for the challenge ${challenge.title}`,
-						);
-
+						await handleCreateTeam(interaction);
 						return;
 					}
 
@@ -94,10 +88,11 @@ module.exports = {
 			// todo does this need to be here?
 			if (!interaction.isCommand()) return;
 
-			await command.execute(interaction);
+			//await command.execute(interaction);
 		} catch (err) {
 			console.error(`Error executing ${interaction.commandName}`);
 			console.error(err);
+			interaction.reply(`Something went wrong: ${err}`);
 		}
 		console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
 	},
