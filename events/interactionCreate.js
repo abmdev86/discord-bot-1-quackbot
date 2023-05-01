@@ -64,7 +64,6 @@ module.exports = {
 			}
 
 			if (interaction.isSelectMenu()) {
-				console.log('joining...');
 				switch (interaction.customId) {
 					case 'join-quackathon': {
 						await handleJoinQuackathon(interaction);
@@ -94,6 +93,6 @@ module.exports = {
 			console.error(err);
 			interaction.reply(`Something went wrong: ${err}`);
 		}
-		console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
+		//console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
 	},
 };
