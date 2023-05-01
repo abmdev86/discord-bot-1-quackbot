@@ -6,7 +6,8 @@
 	"scripts": {
 		"test": "jest -i",
 		"start": "node index.js",
-		"commsync": "node deploy-commands.js"
+		"commsync": "node deploy-commands.js",
+		"dev": "nodemon index.js"
 	},
 	"repository": {
 		"type": "git",

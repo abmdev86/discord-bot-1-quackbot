@@ -1,4 +1,4 @@
-const { getAllChallenges, getChallengeById, createTeam } = require('../lib/dbHandlers');
+const { getAllChallenges, getChallengeById, createTeam, getAllUsers } = require('../lib/dbHandlers');
 const {
 	handleCreateQuackathon,
 	handleJoinQuackathon,
@@ -14,6 +14,29 @@ module.exports = {
 		const command = interaction.client.commands.get(interaction.commandName);
 
 		try {
+			if (interaction.isAutocomplete()) {
+				if (interaction.commandName === 'team-invite') {
+					const focusedValue = interaction.options.getFocused();
+					const users = await getAllUsers();
+					const choices = [];
+
+					users.map(user => {
+						let name = user.userName;
+
+						if (name || name !== '') {
+							choices.push(name);
+						}
+					});
+					//console.log('choices: ', choices);
+					console.log('hoistedOptions', interaction._hoistedOptions);
+					const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+
+					await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })));
+					return;
+				}
+				return;
+			}
+
 			if (interaction.commandName === 'create-team') {
 				//todo move somewhere else if needed.
 				const teamName = interaction.options._hoistedOptions[0].value;
@@ -36,6 +59,10 @@ module.exports = {
 				await interaction.reply({ content: teamName, components: [row] });
 				return;
 			}
+
+			// if (interaction.commandName === 'team-invite') {
+			// 	await interaction.reply(`recieved ${interaction.content}`);
+			// }
 			//check for the command name.
 
 			// JOIN TEAM
