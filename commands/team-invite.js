@@ -8,6 +8,9 @@ module.exports = {
 		.setDescription('Invite a member to your team')
 		.addStringOption(option =>
 			option.setName('user').setDescription('The name of user').setRequired(true).setAutocomplete(true),
+		)
+		.addStringOption(option =>
+			option.setName('team').setDescription('the team to join').setRequired(true).setAutocomplete(true),
 		),
 
 	async execute(interaction) {
@@ -20,8 +23,7 @@ module.exports = {
 			if (user) {
 				//todo
 				const otherMember = interaction.options._hoistedOptions[0].value;
-				const newUser = await getUserByUserName(otherMember);
-				interaction.content = newUser.id;
+				//const newUser = await getUserByUserName(otherMember);
 
 				//todo get list of user teams
 				//const getTeams = await getAllTeamsByUserId(userId);

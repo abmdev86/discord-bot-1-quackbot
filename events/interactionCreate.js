@@ -1,3 +1,4 @@
+const { getAllTeamsByUserId, getUserById, getUserByUserName, getAllTeams } = require('../lib/dbHandlers');
 const { getAllChallenges, getChallengeById, createTeam, getAllUsers } = require('../lib/dbHandlers');
 const {
 	handleCreateQuackathon,
@@ -16,20 +17,44 @@ module.exports = {
 		try {
 			if (interaction.isAutocomplete()) {
 				if (interaction.commandName === 'team-invite') {
-					const focusedValue = interaction.options.getFocused();
+					const focusedOption = interaction.options.getFocused(true);
 					const users = await getAllUsers();
+
+					const inviteeId = interaction.user.id;
+					const usersOnTeams = await getAllTeamsByUserId(inviteeId);
+					const teams = await getAllTeams();
 					const choices = [];
+					if (focusedOption.name === 'user') {
+						users.map(user => {
+							let name = user.userName;
 
-					users.map(user => {
-						let name = user.userName;
+							if (name || name !== '') {
+								choices.push(name);
+							}
+						});
+					}
+					if (focusedOption.name === 'team') {
+						let teamChoices = [];
+						usersOnTeams.map(userOnTeam => {
+							teams.map(team => {
+								if (team.id === userOnTeam.id) {
+									teamChoices.push(team.name);
+								}
+							});
+						});
+						console.log('TEAMS: ', teamChoices);
 
-						if (name || name !== '') {
-							choices.push(name);
-						}
-					});
+						teamChoices.map(team => {
+							let name = team.name;
+							if (name || name !== '') {
+								choices.push(name);
+								console.log('teams choice', choices);
+							}
+						});
+					}
 					//console.log('choices: ', choices);
 					console.log('hoistedOptions', interaction._hoistedOptions);
-					const filtered = choices.filter(choice => choice.startsWith(focusedValue));
+					const filtered = choices.filter(choice => choice.startsWith(focusedOption.value));
 
 					await interaction.respond(filtered.map(choice => ({ name: choice, value: choice })));
 					return;
@@ -118,6 +143,7 @@ module.exports = {
 		} catch (err) {
 			console.error(`Error executing ${interaction.commandName}`);
 			console.error(err);
+			if (!interaction.isCommand()) return;
 			interaction.reply(`Something went wrong: ${err}`);
 		}
 		//console.log(`${interaction.user.tag} in #${interaction.channel.name} triggered an interaction.`);
