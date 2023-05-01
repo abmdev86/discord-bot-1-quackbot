@@ -8,57 +8,53 @@ datasource db {
 }
 
 model User {
-  id       String    @unique
-  userName String    
-  teams    UsersOnTeams[]
-  createdAt DateTime  @default(now())
+  id        String         @unique
+  userName  String
+  createdAt DateTime       @default(now())
+  teams     UsersOnTeams[]
 }
 
 model Team {
-  id          String    @id @default(uuid())
-  name        String    @unique
-  challengeId String    
-  challenge   Challenge @relation(fields: [challengeId], references: [id])
-  members     UsersOnTeams[]
+  id          String         @id @default(uuid())
+  name        String         @unique
+  challengeId String
+  createdAt   DateTime       @default(now())
   submissions Submission?
-  createdAt   DateTime  @default(now())
+  challenge   Challenge      @relation(fields: [challengeId], references: [id])
+  members     UsersOnTeams[]
 }
 
 model UsersOnTeams {
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String    
-  team        Team      @relation(fields: [teamId], references: [id])
-  teamId      String
-
-  createdAt   DateTime  @default(now())
+  userId    String
+  teamId    String
+  createdAt DateTime @default(now())
+  team      Team     @relation(fields: [teamId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
   @@id([userId, teamId])
 }
 
 model Submission {
-  id              String    @id @default(uuid())
-  projectName     String    @unique
-  teamId          String    @unique
-  team            Team      @relation(fields: [teamId], references: [id])
-  repoUrl         String
-  deployedUrl     String?
-  winner          Boolean   @default(false)
-
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id          String   @id @default(uuid())
+  projectName String   @unique
+  teamId      String   @unique
+  repoUrl     String
+  deployedUrl String?
+  winner      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  team        Team     @relation(fields: [teamId], references: [id])
 }
 
 model Challenge {
-  id              String        @id @default(uuid())
-  title           String        @unique
-  dueAt           DateTime
-  minTeam         Int?           @default(2)
-  maxTeam         Int?           @default(4)
-  description     String
-  requirements    String
-  projectTeam     Team[]
-
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime?      @updatedAt
+  id           String    @id @default(uuid())
+  title        String    @unique
+  dueAt        DateTime
+  minTeam      Int?      @default(2)
+  maxTeam      Int?      @default(4)
+  description  String
+  requirements String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime? @updatedAt
+  projectTeam  Team[]
 }
-
