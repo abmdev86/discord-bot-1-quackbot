@@ -20,10 +20,10 @@ module.exports = {
 				.setLabel('What is the name of your team?')
 				.setStyle('SHORT');
 
-			const teamMembers = new TextInputComponent()
-				.setCustomId('teamMembers')
-				.setLabel('Who is in your team?')
-				.setStyle('SHORT');
+			// const teamMembers = new TextInputComponent()
+			// 	.setCustomId('teamMembers')
+			// 	.setLabel('Who is in your team?')
+			// 	.setStyle('SHORT');
 
 			const projectURL = new TextInputComponent()
 				.setCustomId('projectURL')
@@ -36,11 +36,11 @@ module.exports = {
 				.setStyle('SHORT');
 
 			const firstActionRow = new MessageActionRow().addComponents(teamName);
-			const secondActionRow = new MessageActionRow().addComponents(teamMembers);
+			// const secondActionRow = new MessageActionRow().addComponents(teamMembers);
 			const thirdActionRow = new MessageActionRow().addComponents(projectURL);
 			const fourthActionRow = new MessageActionRow().addComponents(repoURL);
 
-			modal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
+			modal.addComponents(firstActionRow,/* secondActionRow,*/ thirdActionRow, fourthActionRow);
 			console.log(modal);
 			await interaction.showModal(modal);
 		} else {
