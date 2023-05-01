@@ -4,13 +4,13 @@ async function main() {
 	// create users
 	console.log('creating users...');
 	const keegan = await db.user.create({
-		data: { userName: 'Keegan' },
+		data: { id: "keegan", userName: 'Keegan' },
 	});
 	const auroya = await db.user.create({
-		data: { userName: 'Auroya' },
+		data: { id: "auroiah", userName: 'Auroiah' },
 	});
 	const rick = await db.user.create({
-		data: { userName: 'Rick' },
+		data: { id: "rick", userName: 'Rick' },
 	});
 	console.log('users created!');
 
