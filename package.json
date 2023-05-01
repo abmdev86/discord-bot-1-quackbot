@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"test": "jest -i",
-		"start": "nodemon index.js",
+		"start": "node index.js",
 		"commsync": "node deploy-commands.js"
 	},
 	"repository": {
