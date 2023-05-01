@@ -8,9 +8,13 @@
 		"start": "nodemon index.js",
 		"commsync": "node deploy-commands.js"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/abmdev86/discord-bot-1-quackbot.git"
+	},
 	"prisma": {
 		"seed": "ts-node --transpile-only prisma/seed.ts"
-	  },
+	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
